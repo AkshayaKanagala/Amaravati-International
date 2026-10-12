@@ -27,7 +27,7 @@ button.addEventListener('click',async()=>{
  busy=true;render();show('Preparing secure microphone conversation…');
  try{
   if(!navigator.mediaDevices?.getUserMedia)throw new Error('Microphone access requires HTTPS and a supported browser.');
-  if(!vapi){const module=await import('https://cdn.jsdelivr.net/npm/@vapi-ai/web@2/+esm');const Vapi=module.default;vapi=new Vapi(PUBLIC_KEY);
+  if(!vapi){const module=await import('https://cdn.jsdelivr.net/npm/@vapi-ai/web@2/+esm');const Vapi=module.default?.default || module.default?.Vapi || module.Vapi || module.default; if(typeof Vapi!=='function')throw new Error('Voice SDK failed to load correctly.');vapi=new Vapi(PUBLIC_KEY);
    vapi.on('call-start',()=>{active=true;busy=false;render();show('Connected to Meena. Speak now.');});
    vapi.on('call-end',()=>{active=false;busy=false;render();show('Conversation ended. You can start another demo call.');});
    vapi.on('error',err=>{active=false;busy=false;render();show('Voice call error. Check microphone permissions and try again.');console.error('Vapi voice demo error:',err);});
